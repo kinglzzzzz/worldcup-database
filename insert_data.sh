@@ -8,15 +8,15 @@ else
 fi
 
 # Do not change code above this line. Use the PSQL variable above to query your database.
-echo $($PSQL "TRUNCATE TABLE games, teams")
+$PSQL "TRUNCATE TABLE games, teams"
 
 cat games.csv | while IFS="," read YEAR ROUND WINNER OPPONENT WINNER_GOALS OPPONENT_GOALS
 do
   if [[ $YEAR != "year" ]]
   then
-    #get winner_id
+    #get winner id
     WINNER_ID=$($PSQL "select team_id from teams where name='$WINNER'")
-    #if not found
+    #if data not exist
     if [[ -z $WINNER_ID ]]
     then
       #insert data
@@ -24,17 +24,17 @@ do
       WINNER_ID=$($PSQL "select team_id from teams where name='$WINNER'")
     fi
 
-    #get opponent_id
+    #get opponent id
     OPPONENT_ID=$($PSQL "select team_id from teams where name='$OPPONENT'")
-    #if not found
+    #if data not exist
     if [[ -z $OPPONENT_ID ]]
     then
-      #insert data
+      #isnert data
       INSERT_RESULT=$($PSQL "insert into teams(name) values('$OPPONENT')")
       OPPONENT_ID=$($PSQL "select team_id from teams where name='$OPPONENT'")
     fi
 
     #insert game
-    INSERT_RESULT=$($PSQL "insert into games(year, round, winner_id,opponent_id,winner_goals,opponent_goals) values($YEAR,'$ROUND',$WINNER_ID,$OPPONENT_ID,$WINNER_GOALS,$OPPONENT_GOALS)")
+    INSERT_RESULT=$($PSQL "insert into games(year, round, winner_id, opponent_id, winner_goals, opponent_goals) values($YEAR, '$ROUND', $WINNER_ID, $OPPONENT_ID, $WINNER_GOALS, $OPPONENT_GOALS)")
   fi
-done
+done 

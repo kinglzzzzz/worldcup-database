@@ -17,7 +17,7 @@ echo -e "\nAverage number of goals in all games from the winning teams rounded t
 echo "$($PSQL "select round(avg(winner_goals),2) from games")"
 
 echo -e "\nAverage number of goals in all games from both teams:"
-echo "$($PSQL "select avg(winner_goals +  opponent_goals) from  games")"
+echo "$($PSQL "select avg(winner_goals + opponent_goals) from games")"
 
 echo -e "\nMost goals scored in a single game by one team:"
 echo "$($PSQL "select max(winner_goals) from games")"
@@ -38,4 +38,4 @@ echo -e "\nYear and team name of all the champions:"
 echo "$($PSQL "select year, name from teams join games on teams.team_id = games.winner_id where round='Final' order by year")"
 
 echo -e "\nList of teams that start with 'Co':"
-echo "$($PSQL "select name from teams where name like 'Co%'")"
+echo "$($PSQL "select name from teams where name like 'Co%' order by name")"
